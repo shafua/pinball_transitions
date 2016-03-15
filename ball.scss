@@ -10,8 +10,14 @@ body{
 	position: absolute;
 	width: calc(100% - #{$diameter});
 	height: calc(100% - #{$diameter});
+
+	width: calc(25% - #{$diameter});
+	height: calc(25% - #{$diameter});
+	margin: 300px 0 0 400px;
+	border: 1px solid #f00;
+
 }
-#ball {
+#ball_element {
 	position: absolute;
 	left:50%;
 	top:50%;
@@ -25,5 +31,5 @@ body{
 
 	transition-property: left, top;
 	transition-timing-function:linear;
-    transition-duration: 2500ms;
+    transition-duration: 500ms;
 }
