@@ -1,0 +1,29 @@
+$diameter: 25px;
+$radius: $diameter/2;
+
+body{
+	padding:0;
+	margin:0;
+}
+#main{
+	margin:0 $radius $diameter;
+	position: absolute;
+	width: calc(100% - #{$diameter});
+	height: calc(100% - #{$diameter});
+}
+#ball {
+	position: absolute;
+	left:50%;
+	top:50%;
+	width:$diameter;
+	height:$diameter;
+	margin-left:-$radius;
+	margin-right:-$radius;
+	border:0;
+	border-radius: $radius;
+	background-color: #000;
+
+	transition-property: left, top;
+	transition-timing-function:linear;
+    transition-duration: 2500ms;
+}
