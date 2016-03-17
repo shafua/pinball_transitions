@@ -16,10 +16,10 @@ body{
 	width: calc(100% - #{$diameter});
 	height: calc(100% - #{$diameter});
 
-	// width: calc(25% - #{$diameter});
-	// height: calc(25% - #{$diameter});
-	// margin: 300px 0 0 400px;
-	// border: 1px solid #f00;
+	width: calc(25% - #{$diameter});
+	height: calc(25% - #{$diameter});
+	margin: 300px 0 0 400px;
+	border: 1px solid #f00;
 
 }
 #ball_element {
@@ -36,8 +36,12 @@ body{
 
 	transition-property: left, top;
 	transition-timing-function:linear;
-    transition-duration: 200ms;
-    transition-delay: 100ms;
+    transition-duration: 50ms;
+    transition-delay: 10ms;
+
+
+	left:50%;
+	top:10%;
 }
 #button{
 	position: absolute;

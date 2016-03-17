@@ -6,7 +6,11 @@ body {
   margin: 12.5px;
   position: absolute;
   width: calc(100% - 25px);
-  height: calc(100% - 25px); }
+  height: calc(100% - 25px);
+  width: calc(25% - 25px);
+  height: calc(25% - 25px);
+  margin: 300px 0 0 400px;
+  border: 1px solid #f00; }
 
 #ball_element {
   position: absolute;
@@ -21,8 +25,10 @@ body {
   background-color: #000;
   transition-property: left, top;
   transition-timing-function: linear;
-  transition-duration: 200ms;
-  transition-delay: 100ms; }
+  transition-duration: 50ms;
+  transition-delay: 10ms;
+  left: 50%;
+  top: 10%; }
 
 #button {
   position: absolute;
