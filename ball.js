@@ -5,13 +5,18 @@ var BALL = {
 	destinationPoint: [],
 	move: function (to) {
 		to = to || BALL.nextPoint;
-		console.log("moving from", BALL.currentPoint)
-		console.log("moving to", to)
+		//console.log("moving from", BALL.currentPoint)
+		//console.log("moving to", to)
 
 		FLAGS.movingtop = BALL.currentPoint[1] != to[1];
 		FLAGS.movingleft = BALL.currentPoint[0] != to[0];
+		var distance = Math.sqrt( Math.pow( to[0] - BALL.currentPoint[0] , 2 ) + Math.pow( to[1] - BALL.currentPoint[1] , 2 ) );
+		var distance2 = Math.abs( to[0] - BALL.currentPoint[0] ) + Math.abs( to[1] - BALL.currentPoint[1] );
+		
+		var travelTime = 1000 * distance;
+		console.log(distance / distance2)
 
-		this.element.setAttribute("style","left:"+(to[0]*100)+"%;top:"+(to[1]*100)+"%;")
+		this.element.setAttribute("style","left:"+(to[0]*100)+"%;top:"+(to[1]*100)+"%;transition-duration:"+travelTime+"ms;")
 	}
 }; 
 var FLAGS = {
@@ -24,11 +29,11 @@ barrier = new Barrier(button);
 
 BALL.element.addEventListener('transitionend', function(e) {
 	if (FLAGS.movingtop && FLAGS.movingleft) {
-		console.log("ignore " + e.propertyName, "left==="+FLAGS.movingleft, "topp==="+FLAGS.movingtop)
+		//console.log("ignore " + e.propertyName, "left==="+FLAGS.movingleft, "topp==="+FLAGS.movingtop)
 		FLAGS["moving"+e.propertyName] = false;
 		return;
 	};
-	console.log("ignore nothing")
+	//console.log("ignore nothing")
 
 	BALL.currentPoint = [BALL.nextPoint[0], BALL.nextPoint[1] ]
 	BALL.nextPoint =  [BALL.destinationPoint[0], BALL.destinationPoint[1] ]
@@ -40,8 +45,8 @@ BALL.element.addEventListener('transitionend', function(e) {
 	var intersection = barrier.check(BALL.nextPoint, BALL.destinationPoint);
 	
 	if (intersection) {
-		console.log("intersection", intersection)
-		console.log(BALL.nextPoint, BALL.destinationPoint)
+		//console.log("intersection", intersection)
+		//console.log(BALL.nextPoint, BALL.destinationPoint)
 		BALL.destinationPoint = [intersection[0], intersection[1]];
 		//alert("intersection!")
 	};
@@ -51,7 +56,7 @@ function makeB() {BALL.destinationPoint = getRandomDestinationPoint();
 	
 	var intersection = barrier.check(BALL.currentPoint, BALL.nextPoint);
 	
-	if (intersection) console.log("intersection", intersection);
+	//if (intersection) console.log("intersection", intersection);
 	BALL.move(BALL.nextPoint);
 }
 
