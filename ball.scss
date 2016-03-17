@@ -16,10 +16,10 @@ body{
 	width: calc(100% - #{$diameter});
 	height: calc(100% - #{$diameter});
 
-	width: calc(25% - #{$diameter});
 	height: calc(25% - #{$diameter});
 	margin: 300px 0 0 400px;
 	border: 1px solid #f00;
+	width: calc(25% - #{$diameter});
 
 }
 #ball_element {
@@ -38,6 +38,7 @@ body{
 	transition-timing-function:linear;
     transition-duration: 50ms;
     transition-delay: 10ms;
+    z-index: 100;
 
 
 	left:50%;
@@ -56,4 +57,6 @@ body{
 
 }
 
-#bf{position: absolute;background-color:#fa0;width:10px;height:10px;left:100px; top: 297px;}
+.bf{position: absolute;background-color:#fa0;width:$diameter;height:$diameter;opacity:.1;border-radius: $radius;
+	margin-left:-$radius;
+	margin-top:-$radius;}

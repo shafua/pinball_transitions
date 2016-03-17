@@ -7,10 +7,10 @@ body {
   position: absolute;
   width: calc(100% - 25px);
   height: calc(100% - 25px);
-  width: calc(25% - 25px);
   height: calc(25% - 25px);
   margin: 300px 0 0 400px;
-  border: 1px solid #f00; }
+  border: 1px solid #f00;
+  width: calc(25% - 25px); }
 
 #ball_element {
   position: absolute;
@@ -27,6 +27,7 @@ body {
   transition-timing-function: linear;
   transition-duration: 50ms;
   transition-delay: 10ms;
+  z-index: 100;
   left: 50%;
   top: 10%; }
 
@@ -41,10 +42,12 @@ body {
   height: 100px;
   margin-left: -75px; }
 
-#bf {
+.bf {
   position: absolute;
   background-color: #fa0;
-  width: 10px;
-  height: 10px;
-  left: 100px;
-  top: 297px; }
+  width: 25px;
+  height: 25px;
+  opacity: .1;
+  border-radius: 12.5px;
+  margin-left: -12.5px;
+  margin-top: -12.5px; }
