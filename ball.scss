@@ -1,20 +1,25 @@
 $diameter: 25px;
 $radius: $diameter/2;
 
+$buttonWidth:150px;
+$buttonHeight:100px;
+
+$buttonLeftMargin: $buttonWidth/2;
+
 body{
 	padding:0;
 	margin:0;
 }
 #main{
-	margin:0 $radius $diameter;
+	margin:$radius;
 	position: absolute;
 	width: calc(100% - #{$diameter});
 	height: calc(100% - #{$diameter});
 
-	width: calc(25% - #{$diameter});
-	height: calc(25% - #{$diameter});
-	margin: 300px 0 0 400px;
-	border: 1px solid #f00;
+	// width: calc(25% - #{$diameter});
+	// height: calc(25% - #{$diameter});
+	// margin: 300px 0 0 400px;
+	// border: 1px solid #f00;
 
 }
 #ball_element {
@@ -24,12 +29,27 @@ body{
 	width:$diameter;
 	height:$diameter;
 	margin-left:-$radius;
-	margin-right:-$radius;
+	margin-top:-$radius;
 	border:0;
 	border-radius: $radius;
 	background-color: #000;
 
 	transition-property: left, top;
 	transition-timing-function:linear;
-    transition-duration: 500ms;
+    transition-duration: 200ms;
+    transition-delay: 100ms;
 }
+#button{
+	position: absolute;
+	display:block;
+	text-decoration:none;
+	background-color: #eee;
+	left:50%;
+	bottom:50px;
+	width:$buttonWidth;
+	height:$buttonHeight;
+	margin-left:-$buttonLeftMargin;
+
+}
+
+#bf{position: absolute;background-color:#fa0;width:10px;height:10px;left:100px; top: 297px;}
