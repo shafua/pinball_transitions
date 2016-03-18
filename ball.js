@@ -3,18 +3,15 @@ var BALL = {
 	currentPoint: [.5, .5],
 	nextPoint: getRandomDestinationPoint(),
 	destinationPoint: [],
+	destinationIntersected: false,
 	move: function (to) {
 		to = to || BALL.nextPoint;
-		//console.log("moving from", BALL.currentPoint)
-		//console.log("moving to", to)
 
 		FLAGS.movingtop = BALL.currentPoint[1] != to[1];
 		FLAGS.movingleft = BALL.currentPoint[0] != to[0];
+
 		var distance = Math.sqrt( Math.pow( to[0] - BALL.currentPoint[0] , 2 ) + Math.pow( to[1] - BALL.currentPoint[1] , 2 ) );
-		//var distance2 = Math.abs( to[0] - BALL.currentPoint[0] ) + Math.abs( to[1] - BALL.currentPoint[1] );
-		
-		var travelTime = 250 * distance;
-		//console.log(distance / distance2)
+		var travelTime = 1000 * distance;
 
 		this.element.setAttribute("style","left:"+(to[0]*100)+"%;top:"+(to[1]*100)+"%;transition-duration:"+travelTime+"ms;")
 	}
@@ -38,9 +35,12 @@ BALL.element.addEventListener('transitionend', function(e) {
 
 	BALL.currentPoint = [BALL.nextPoint[0], BALL.nextPoint[1] ]
 	BALL.nextPoint =  [BALL.destinationPoint[0], BALL.destinationPoint[1] ]
-	//BALL.destinationPoint = getRandomDestinationPoint();
-	BALL.destinationPoint = getDestinationPoint(BALL.currentPoint, BALL.nextPoint);
-	// console.log("got dp (event)", BALL.destinationPoint)
+
+	BALL.destinationPoint = getDestinationPoint(BALL.currentPoint, BALL.nextPoint, [barrier], BALL.destinationIntersected);
+	
+	
+
+	BALL.destinationIntersected = false;
 
 	BALL.move(BALL.nextPoint)
 	
@@ -49,18 +49,27 @@ BALL.element.addEventListener('transitionend', function(e) {
 
 	if (intersection) {
 		BALL.destinationPoint = [intersection[0], intersection[1]];
-		console.log( "intersected at", intersection)
+		BALL.destinationIntersected = intersection[2];
+		//console.log( "intersected at", intersection)
 
-		var div = document.createElement('div');
-		div.className = "bf";
-		div.style.left = (intersection[0]*100)+"%";
-		div.style.top = (intersection[1]*100)+"%";
-		main.appendChild(div)
+		// var div = document.createElement('div');
+		// div.className = "bf";
+		// div.style.left = (intersection[0]*100)+"%";
+		// div.style.top = (intersection[1]*100)+"%";
+		// div.style.backgroundColor = intersection[2][0] === "x" ? "#fa0" : "#0af";
+		// main.appendChild(div);
+
+		// var divOrigin = document.createElement('div');
+		// divOrigin.className = "bf";
+		// divOrigin.style.left = (BALL.nextPoint[0]*100)+"%";
+		// divOrigin.style.top = (BALL.nextPoint[1]*100)+"%";
+		// divOrigin.style.backgroundColor = intersection[2][0] === "x" ? "#a50" : "#05a";
+		// main.appendChild(divOrigin);
 	};
 });
 
 function makeB() {
-	BALL.destinationPoint = getDestinationPoint(BALL.currentPoint, BALL.nextPoint);
+	BALL.destinationPoint = getDestinationPoint(BALL.currentPoint, BALL.nextPoint, [barrier]);
 	//console.log("got dp (make fn)", BALL.destinationPoint)
 	
 	var intersection = barrier.check(BALL.currentPoint, BALL.nextPoint);
@@ -82,36 +91,44 @@ function isEnteringIntoaSegment (segment, coordinate) {
 		return (coordinate > segment[0]) && (coordinate < segment[1])
 	}
 
-function getDestinationPoint(currentPoint, nextPoint) {
-	//alert("getDestinationPoint?")
-	//console.log("getDestinationPoint:", currentPoint, nextPoint)
+
+function getDestinationPoint(currentPoint, nextPoint, barriers, intersectionSide) {
 	var vector = [nextPoint[0] - currentPoint[0], nextPoint[1] - currentPoint[1]], coordinate;
 	//+(vector[0] > 0) // +(vector[1] > 0)
-
-
-
 	if (vector[0]===0) return [nextPoint[0], +!(nextPoint[1])];
 	if (vector[1]===0) return [+!(nextPoint[0]) , nextPoint[1]];
-		
-		if (nextPoint[0]){
-			coordinate = getIntersectionOf2Straights(0, -vector[1]/vector[0], nextPoint[0],  nextPoint[1]);
-			if (isEnteringIntoaSegment([0,1], coordinate) ) return [0, coordinate];
-		};
-		if (nextPoint[0]!==1){
-		
-			coordinate = getIntersectionOf2Straights(1, -vector[1]/vector[0], nextPoint[0],  nextPoint[1]);
-			if (isEnteringIntoaSegment([0,1], coordinate) ) return [1, coordinate];
-		};
-		if (nextPoint[1]){
-			coordinate = getIntersectionOf2Straights(0, -vector[0]/vector[1], nextPoint[1],  nextPoint[0]);
-			if (isEnteringIntoaSegment([0,1], coordinate) ) return [coordinate, 0];
-		}
-		if (nextPoint[1]!==1){
-			coordinate = getIntersectionOf2Straights(1, -vector[0]/vector[1], nextPoint[1],  nextPoint[0]);
-			if (isEnteringIntoaSegment([0,1], coordinate) ) return [coordinate, 1];
-		}
+	var rect = intersectionSide ? 
+		(intersectionSide[0] === "x" ? 
+									(intersectionSide[1] ?  [ [0,1], [nextPoint[1], 1]] : [ [0,1], [0, nextPoint[1] ]] ) : 
+									(intersectionSide[1] ?  [ [nextPoint[0], 1], [0,1]] : [ [0, nextPoint[0] ], [0,1]] )
+		) : 
+		[ [0,1], [0,1] ];
 
-console.log('never happens')
+	return checkRect(rect, currentPoint, nextPoint)
+	function checkRect(rect, currentPoint, nextPoint) {
+		if (nextPoint[0]!==rect[0][0]){
+			coordinate = getIntersectionOf2Straights(0, -vector[1]/vector[0], nextPoint[0],  nextPoint[1]);
+			if (isEnteringIntoaSegment(rect[1], coordinate) ) return [rect[0][0], coordinate];
+		};
+
+		if (nextPoint[0]!==rect[0][1]){
+			coordinate = getIntersectionOf2Straights(1, -vector[1]/vector[0], nextPoint[0],  nextPoint[1]);
+			if (isEnteringIntoaSegment(rect[1], coordinate) ) return [rect[0][1], coordinate];
+		};
+
+		if (nextPoint[1]!==rect[1][0]){
+			coordinate = getIntersectionOf2Straights(0, -vector[0]/vector[1], nextPoint[1],  nextPoint[0]);
+			if (isEnteringIntoaSegment(rect[0], coordinate) ) return [coordinate, rect[1][0]];
+		};
+
+		if (nextPoint[1]!==rect[1][1]){
+			coordinate = getIntersectionOf2Straights(1, -vector[0]/vector[1], nextPoint[1],  nextPoint[0]);
+			if (isEnteringIntoaSegment(rect[0], coordinate) ) return [coordinate, rect[1][1]];
+		};
+
+console.log('never happens getDestinationPoint2', currentPoint, nextPoint, barriers)
+console.log('rect', rect)
+	}
 }
 
 function Barrier(element) {
@@ -133,10 +150,13 @@ function Barrier(element) {
 			if (!aboveMap[i]) continue;
 			intersectionDirection = i%2 ? [this.ySegment[ +(i - 2 >= 0) ], 1/k, p1[1], p1[0], "x"] : [this.xSegment[ +(i - 2 >= 0) ], k, p1[0], p1[1], "y"] ;
 			coordinate = getIntersectionOf2Straights(intersectionDirection[0], intersectionDirection[1], intersectionDirection[2], intersectionDirection[3]);
-			if ( isEnteringIntoaSegment(this[ intersectionDirection[4]+"Segment" ], coordinate) ) return intersectionDirection[4] === "x" ? [coordinate, intersectionDirection[0], true] : [ intersectionDirection[0], coordinate, false];
-		};
-
+			if ( isEnteringIntoaSegment(this[ intersectionDirection[4]+"Segment" ], coordinate) ) {
+				return intersectionDirection[4] === "x" ? 
+												[ coordinate, intersectionDirection[0], ["x",+(i - 2 >= 0)]] : 
+												[ intersectionDirection[0], coordinate, ["y",+(i - 2 >= 0)]] ;
+				}
 		}
+	}
 
 
 	this.__pointAboveWhat = function (p) {
