@@ -21,7 +21,7 @@ body {
   background-color: #000;
   transition-property: left, top;
   transition-timing-function: linear;
-  transition-duration: 50ms;
+  transition-duration: 1500ms;
   transition-delay: 10ms;
   z-index: 100; }
 
@@ -39,14 +39,5 @@ body {
   bottom: 50px;
   width: 200px;
   height: 50px;
-  margin-left: -100px; }
-
-.bf {
-  position: absolute;
-  background-color: #fa0;
-  width: 25px;
-  height: 25px;
-  opacity: .1;
-  border-radius: 12.5px;
-  margin-left: -12.5px;
-  margin-top: -12.5px; }
+  margin-left: -100px;
+  line-height: 50px; }
